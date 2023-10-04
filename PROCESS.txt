@@ -1,0 +1,40 @@
+**Startup
+Create folder - name of image on GooleDrive
+Download image from Google Drive into folder
+
+**Upscaler
+Use API to upload image to upscaler and increase x 4
+download
+save as "FILENAME print"
+
+**Photoshop
+open FILENAME print into PS
+Add watercolour texture
+Save as FILENAME source"
+
+change layer type to multiply
+crop to 5:7 ratio
+Save as FILENAME placeit"
+
+
+Create macro version using PS action
+save as "FILENAME macro"
+
+
+
+**place it**
+upload 10 "source" images to placeit
+generate mockup
+download
+convert to jpeg
+rename to "FILENAME insitu"
+
+
+**Wordpress
+add new product on wordpress
+create description using chat GPT
+create keywords using chat GPT
+add description, keywords, price, images, and Yoast SEO
+publish
+
+
