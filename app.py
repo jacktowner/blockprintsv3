@@ -614,7 +614,8 @@ class WooCommerce():
             headers={ 
                 'Content-Type': 'image/jpg',
                 'Content-Disposition' : 'attachment; filename=%s'% remote_filename},
-            auth=(self.key, self.secret)
+            auth=(self.key, self.secret),
+            timeout=30
         )
         return res
     
@@ -828,11 +829,12 @@ class my_openAI():
         openai.organization = "org-zaJ7UbfSmPArIQwNAwpHQPfx"
         openai.api_key = os.getenv("OPENAI_API_KEY")
         self.model="text-davinci-003"
-        self.wc_combined_preamble_text = f"Create a json file with a \
+        self.wc_combined_preamble_text = f"Create a json object with no text formatting, with a \
 very short engaging SEO friendly woocommerce product title,\
 a short punchy SEO friendly description,\
 2 woocommerce categories,\
 5 engaging social media tags,\
+using the following keys 'title','description','categories','tags'\
 based on the following text: "
     
     def get_text(self, prompt):
@@ -871,7 +873,7 @@ based on the following text: "
     def create_product_json_from_string(self, product_description:str):
         printable_pattern = r'<[^>]+>'
         product_description = re.sub(printable_pattern, '', product_description)
-        wc_combined_preamble_text = f'{product_description}'
+        wc_combined_preamble_text = f'{product_description}. Remove all text formatting.'
         wc_combined = json.loads(self.get_text(wc_combined_preamble_text))
         wc_combined = list(wc_combined.values())  
         wc_combined[1] = self.remove_sentence_from_string('conversation', wc_combined[1])
