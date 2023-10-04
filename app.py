@@ -765,6 +765,8 @@ class WooCommerce():
                     prompt_descript = new_description
 
     def create_product_based_on_template(self, data):
+        print("Wordpress")
+        
         template_product_id = '1084'
         template_variations = my_wc.wcapi.get(f"products/{template_product_id}/variations", params={'per_page': 100}).json()
         new_product = my_wc.get_product(template_product_id).json()
@@ -819,7 +821,7 @@ class WooCommerce():
 
 class my_openAI():
     def __init__(self):
-        os.environ['OPENAI_API_KEY'] = "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"
+
         openai.organization = "org-zaJ7UbfSmPArIQwNAwpHQPfx"
         openai.api_key = os.getenv("OPENAI_API_KEY")
         self.model="text-davinci-003"
@@ -1109,7 +1111,7 @@ def run_complete_process_on_gdrive_to_process():
         folder_id=my_gd.to_process_folder_id,
         no_of_files=no_of_files
     )    
-    for google_file in google_file_list:
+    for google_file in google_file_list[1:]:
         google_file_name = google_file['name']
         destination_path = os.path.join(my_os.temp_folder,google_file['id'])
         start_file = '_start.jpg'
