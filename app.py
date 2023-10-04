@@ -363,14 +363,14 @@ class PhotoShop:
         #add 0.94 crop action here
         self.open_file_run_action_save_file_close(l['destination_file_path'],'add watercolour texture',l['watercolour_mockup'])
         self.open_file_run_action_save_file_close(l['watercolour_mockup'],'make macro',l['watercolour_macro'])
-        self.open_file_run_action_save_file_close(l['watercolour_mockup'], 'magnetv2', l['magnet_filename'])
+        self.open_file_run_action_save_file_close(l['watercolour_mockup'], 'magnet', l['magnet_filename'])
         self.open_file_run_action_save_file_close(l['watercolour_mockup'], 'no frame', l['no_frame_filename'])
         self.open_file_run_action_save_file_close(l['watercolour_mockup'], 'black frame', l['black_frame_file'])
         self.open_file_run_action_save_file_close(l['watercolour_mockup'], 'white frame', l['white_frame_file'])
         self.open_file_run_action_save_file_close(l['watercolour_mockup'], 'oak frame', l['oak_frame_file'])
         self.open_file_run_action_save_file_close(l['watercolour_mockup'], 'walnut frame', l['walnut_frame_file'])
 
-        pyautogui.hotkey("ctrl", "q")  # Use "command" instead of "ctrl" on macOS
+        #pyautogui.hotkey("ctrl", "q")  # Use "command" instead of "ctrl" on macOS
 
  
     def test(self):
@@ -773,6 +773,7 @@ class WooCommerce():
         new_product['images'] = []
         image_alt_text = "Product mockup for " + data['product_info'][0][0]
         
+        print('Adding images')
         for prod_img in data['local_filenames']:
             local_file = data['local_filenames'][prod_img]
             remote_filename = local_file.split('\\')[-1]
@@ -800,6 +801,7 @@ class WooCommerce():
         new_product['categories'] = my_wc.create_object_terms(data['product_info'][0][2], 'products/categories/')
         new_product['tags'] = my_wc.create_object_terms(data['product_info'][0][3], 'products/tags/')
         
+        print('creating post')
         new_product = my_wc.wcapi.post(f"products/", new_product).json()
 
         template_map = [x for x in new_product['images']]
@@ -816,6 +818,7 @@ class WooCommerce():
         template_variations[5].update({'image': {'id':[x['id'] for x in template_map if 'oak' in x['name']][0]}})
         template_variations[6].update({'image': {'id':[x['id'] for x in template_map if 'magnet' in x['name']][0]}})
 
+        print('updating variations')
         result = my_wc.wcapi.post(f"products/{new_product['id']}/variations/batch", {'create': template_variations})
         return
 
@@ -826,11 +829,11 @@ class my_openAI():
         openai.api_key = os.getenv("OPENAI_API_KEY")
         self.model="text-davinci-003"
         self.wc_combined_preamble_text = f"Create a json file with a \
-            very short engaging SEO friendly woocommerce product title,\
-            a short punchy SEO friendly description,\
-            2 woocommerce categories,\
-            5 engaging social media tags,\
-            based on the following text: "
+very short engaging SEO friendly woocommerce product title,\
+a short punchy SEO friendly description,\
+2 woocommerce categories,\
+5 engaging social media tags,\
+based on the following text: "
     
     def get_text(self, prompt):
         response = openai.Completion.create(
@@ -1111,8 +1114,9 @@ def run_complete_process_on_gdrive_to_process():
         folder_id=my_gd.to_process_folder_id,
         no_of_files=no_of_files
     )    
-    for google_file in google_file_list[1:]:
+    for google_file in google_file_list:
         google_file_name = google_file['name']
+        print(google_file_name)
         destination_path = os.path.join(my_os.temp_folder,google_file['id'])
         start_file = '_start.jpg'
         product_info = my_oa.main_job(google_file_name), #create product info     
