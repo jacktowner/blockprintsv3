@@ -823,6 +823,41 @@ class WooCommerce():
         result = my_wc.wcapi.post(f"products/{new_product['id']}/variations/batch", {'create': template_variations})
         return
 
+    def delete_variations(self, product_id, variation_text):
+        print(f"{product_id}")
+        all_variation_data = self.wcapi.get(f"products/{product_id}/variations").json()
+        match = [x for x in all_variation_data if variation_text.lower() in x['description'].lower()]
+        if len(match) > 0:
+            data = {'status':'private'}
+            r = self.wcapi.put(f"products/{product_id}/variations/{match[0]['id']}", data = data)
+            pass
+
+    def remove_download_variation_for_all_products(self):
+        products = self.get_all_endpoint_terms('products')
+        for product in products[65:]:
+            self.delete_variations(product['id'],'download')
+        input('Done')
+
+
+    def update_all_products_with_description(self):
+        all_products = self.get_all_products()
+        for product in all_products:
+            print(product['name'])
+            short_description = product['description']
+            long_description = product['description']
+            long_description += f"\n\n[su_spoiler title='Print specifcation'] \
+\nArtworks are printed on 240gsm watercolour paper.\
+\nFrames are handmade in the UK and come in a range of colours including Black, White, Oak and Walnut, and come with a backboard and shatterproof Perspex.\
+\nPlease peel off the protector from both sides of the Perspex sheet.\
+\nFoil Wrapped MDF Wood, moulding width 20 mm, moulding depth 15 mm.\
+[/su_spoiler]\n\n"
+            
+            r = self.wcapi.put(f"products/{product['id']}", data={
+                'description':long_description,
+                'short_description':short_description
+            })
+            pass
+
 class my_openAI():
     def __init__(self):
 
@@ -1092,9 +1127,10 @@ def update_all_wc_new_image_and_variations():
         #clean up
         #remove local images
 
+
+my_wc = WooCommerce()
 my_ps = PhotoShop()
 my_oa = my_openAI()    
-my_wc = WooCommerce()
 my_os = OperatingSystem()
 my_gd = GoogleDrive()
 
