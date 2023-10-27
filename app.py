@@ -515,6 +515,12 @@ class WooCommerce():
         )
         self.key = "jackdtowner@yahoo.co.uk"
         self.secret = "fFBA j7dQ UKqf BtDC 5qMU HG3v"
+        self.spoiler = f"\n\n[su_spoiler title='Print specifcation'] \
+\nArtworks are printed on 240gsm watercolour paper.\
+\nFrames are handmade in the UK and come in a range of colours including Black, White, Oak and Walnut, and come with a backboard and shatterproof Perspex.\
+\nPlease peel off the protector from both sides of the Perspex sheet.\
+\nFoil Wrapped MDF Wood, moulding width 20 mm, moulding depth 15 mm.\
+[/su_spoiler]\n\n"
 
 
     def create_object_terms(self, new_terms_list:list, endpoint:str):
@@ -798,7 +804,8 @@ class WooCommerce():
         new_product['sku'] = data['project_folder']
         new_product['variations'] = []
         new_product['related_ids'] = []
-        new_product['description'] = data['product_info'][0][1]
+        new_product['short_description'] = data['product_info'][0][1]
+        new_product['description'] = data['product_info'][0][1] + self.spoiler
         new_product['categories'] = my_wc.create_object_terms(data['product_info'][0][2], 'products/categories/')
         new_product['tags'] = my_wc.create_object_terms(data['product_info'][0][3], 'products/tags/')
         
@@ -837,7 +844,6 @@ class WooCommerce():
         for product in products[65:]:
             self.delete_variations(product['id'],'download')
         input('Done')
-
 
     def update_all_products_with_description(self):
         all_products = self.get_all_products()
